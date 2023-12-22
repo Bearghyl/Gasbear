@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Gasbear.ApiKeyPage"
+             Title="ApiKeyPage">
+
+    <StackLayout>
+        
+        <Grid ColumnDefinitions="*, Auto"
+              Padding="16">
+            
+            <Entry x:Name="ent_apiKey"
+                   Grid.Column="0"
+                   Placeholder="API-Schlüssel"/>
+            
+            <CheckBox x:Name="cbx_apiKey"
+                      Grid.Column="1"
+                      IsEnabled="False"/>
+            
+        </Grid>
+        
+        <Label x:Name="lbl_apiDataInfo"
+               Margin="16"/>
+        
+        <Grid ColumnDefinitions="*, *"
+              Padding="16">
+            
+            <Button x:Name="btn_delete"
+                    Grid.Column="0"
+                    Margin="16"
+                    Text="Löschen"
+                    Clicked="btn_delete_Clicked"/>
+            
+            <Button x:Name="btn_save"
+                    Grid.Column="1"
+                    Margin="16"
+                    Text="Speichern"
+                    Clicked="btn_save_Clicked"/>
+            
+        </Grid>
+
+        <Label x:Name="lbl_permissionInfo"
+               Margin="16"/>
+
+        <Label Margin="16" 
+               Text="Solltest Du keinen API-Schlüssel haben, kannst Du diesen auf der Seite von Tankerkönig anfordern:"/>
+
+        <Button Text="https://creativecommons.tankerkoenig.de/"
+                BackgroundColor="Transparent"
+                TextColor="Blue"
+                Clicked="OpenWebsite"/>
+
+    </StackLayout>
+    
+</ContentPage>
