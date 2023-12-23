@@ -48,22 +48,30 @@
                        Text="Nach welchem Treibstoff suchst Du?" 
                        TextColor="Grey"/>
                 
-                <RadioButton Grid.Column="0" 
+                <RadioButton x:Name="rbtn_fuelsDiesel" 
+                             Grid.Column="0" 
                              Grid.Row="1" 
-                             Content="Diesel"/>
+                             Content="Diesel"
+                             GroupName="Fuels"/>
                 
-                <RadioButton Grid.Column="0" 
+                <RadioButton x:Name="rbtn_fuelsE5" 
+                             Grid.Column="0" 
                              Grid.Row="2" 
-                             Content="Benzin E5"/>
+                             Content="Benzin E5"
+                             GroupName="Fuels"/>
                 
-                <RadioButton Grid.Column="1" 
+                <RadioButton x:Name="rbtn_fuelsE10" 
+                             Grid.Column="1" 
                              Grid.Row="1" 
-                             Content="Benzin E10"/>
+                             Content="Benzin E10"
+                             GroupName="Fuels"/>
                 
-                <RadioButton Grid.Column="1" 
+                <RadioButton x:Name="rbtn_fuelsAll" 
+                             Grid.Column="1" 
                              Grid.Row="2" 
                              Content="Alle Wählbaren"
-                             IsChecked="True"/>
+                             IsChecked="True"
+                             GroupName="Fuels"/>
             </Grid>
             
         </StackLayout>
