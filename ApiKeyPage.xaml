@@ -40,7 +40,8 @@
         </Grid>
 
         <Label x:Name="lbl_permissionInfo"
-               Margin="16"/>
+               Margin="16"
+               TextColor="Red"/>
 
         <Label Margin="16" 
                Text="Solltest Du keinen API-Schlüssel haben, kannst Du diesen auf der Seite von Tankerkönig anfordern:"/>

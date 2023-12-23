@@ -13,14 +13,18 @@ public partial class ApiKeyPage : ContentPage
             lbl_apiDataInfo.TextColor = Colors.Green;
             lbl_apiDataInfo.Text = "Datei mit einem Schlüssel vorhanden.";
             btn_delete.BackgroundColor = Colors.Red;
+            btn_save.BackgroundColor = Colors.Grey;
             btn_delete.IsEnabled = true;
+            btn_save.IsEnabled = false;
         }
         else
         {
             lbl_apiDataInfo.TextColor = Colors.DarkGrey;
             lbl_apiDataInfo.Text = "Keine Schlüsseldatei vorhanden...";
             btn_delete.BackgroundColor = Colors.Grey;
+            btn_save.BackgroundColor = Colors.Blue;
             btn_delete.IsEnabled = false;
+            btn_save.IsEnabled = true;
         }        
     }
     private async void OpenWebsite(object sender, EventArgs e)
@@ -41,6 +45,13 @@ public partial class ApiKeyPage : ContentPage
                 await sw.WriteLineAsync(ent_apiKey.Text);
             }
             cbx_apiKey.IsChecked = true;
+
+            lbl_apiDataInfo.TextColor = Colors.Green;
+            lbl_apiDataInfo.Text = "Datei mit einem Schlüssel vorhanden.";
+            btn_delete.BackgroundColor = Colors.Red;
+            btn_save.BackgroundColor = Colors.Grey;
+            btn_delete.IsEnabled = true;
+            btn_save.IsEnabled = false;
         }
         else
         {
@@ -56,8 +67,15 @@ public partial class ApiKeyPage : ContentPage
         if (File.Exists(filePath))
         {
             File.Delete(filePath);
-            lbl_apiDataInfo.TextColor = Colors.Red;
-            lbl_apiDataInfo.Text = "Schlüsseldatei gelöscht.";
+
+            cbx_apiKey.IsChecked = false;
+
+            lbl_apiDataInfo.TextColor = Colors.DarkGrey;
+            lbl_apiDataInfo.Text = "Keine Schlüsseldatei vorhanden...";
+            btn_delete.BackgroundColor = Colors.Grey;
+            btn_save.BackgroundColor = Colors.Blue;
+            btn_delete.IsEnabled = false;
+            btn_save.IsEnabled = true;
         }
     }
 }
