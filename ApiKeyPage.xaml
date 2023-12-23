@@ -48,7 +48,7 @@
 
         <Button Text="https://creativecommons.tankerkoenig.de/"
                 BackgroundColor="Transparent"
-                TextColor="Blue"
+                TextColor="CornflowerBlue" 
                 Clicked="OpenWebsite"/>
 
     </StackLayout>

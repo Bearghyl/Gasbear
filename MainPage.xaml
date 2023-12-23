@@ -22,7 +22,8 @@
                    Margin="8"/>
             
             <Button x:Name="btn_apiKey" 
-                    Text="API-Key" 
+                    Text="API-Key"
+                    MaximumHeightRequest="120"
                     Margin="32" 
                     Grid.Column="2"
                     Clicked="btn_apiKey_Clicked"/>

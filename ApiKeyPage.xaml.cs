@@ -11,8 +11,8 @@ public partial class ApiKeyPage : ContentPage
         if (File.Exists(filePath))
         {
             lbl_apiDataInfo.TextColor = Colors.Green;
-            lbl_apiDataInfo.Text = "Datei mit einem Schlüssel vorhanden.";
-            btn_delete.BackgroundColor = Colors.Red;
+            lbl_apiDataInfo.Text = "Schlüsseldatei vorhanden.";
+            btn_delete.BackgroundColor = Colors.IndianRed;
             btn_save.BackgroundColor = Colors.Grey;
             btn_delete.IsEnabled = true;
             btn_save.IsEnabled = false;
@@ -20,9 +20,9 @@ public partial class ApiKeyPage : ContentPage
         else
         {
             lbl_apiDataInfo.TextColor = Colors.DarkGrey;
-            lbl_apiDataInfo.Text = "Keine Schlüsseldatei vorhanden...";
+            lbl_apiDataInfo.Text = "Keine Schlüsseldatei vorhanden.";
             btn_delete.BackgroundColor = Colors.Grey;
-            btn_save.BackgroundColor = Colors.Blue;
+            btn_save.BackgroundColor = Colors.Green;
             btn_delete.IsEnabled = false;
             btn_save.IsEnabled = true;
         }        
@@ -47,8 +47,8 @@ public partial class ApiKeyPage : ContentPage
             cbx_apiKey.IsChecked = true;
 
             lbl_apiDataInfo.TextColor = Colors.Green;
-            lbl_apiDataInfo.Text = "Datei mit einem Schlüssel vorhanden.";
-            btn_delete.BackgroundColor = Colors.Red;
+            lbl_apiDataInfo.Text = "Schlüsseldatei vorhanden.";
+            btn_delete.BackgroundColor = Colors.IndianRed;
             btn_save.BackgroundColor = Colors.Grey;
             btn_delete.IsEnabled = true;
             btn_save.IsEnabled = false;
@@ -71,9 +71,9 @@ public partial class ApiKeyPage : ContentPage
             cbx_apiKey.IsChecked = false;
 
             lbl_apiDataInfo.TextColor = Colors.DarkGrey;
-            lbl_apiDataInfo.Text = "Keine Schlüsseldatei vorhanden...";
+            lbl_apiDataInfo.Text = "Keine Schlüsseldatei vorhanden.";
             btn_delete.BackgroundColor = Colors.Grey;
-            btn_save.BackgroundColor = Colors.Blue;
+            btn_save.BackgroundColor = Colors.Green;
             btn_delete.IsEnabled = false;
             btn_save.IsEnabled = true;
         }
