@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using System.IO;
 using System.Text;
-using Windows.Devices.Radios;
 
 namespace Gasbear
 {
@@ -15,7 +14,7 @@ namespace Gasbear
         async void btn_sniff_Clicked(object sender, EventArgs e)
         {
             // Eingabe
-            string address = ent_streetHousenumber.Text + "," + ent_postcodePlace.Text;
+            string address = ent_streetHousenumber.Text + ", " + ent_postcodePlace.Text;
             string fuelArt = GetSelectedFuelType();
             int radius = Convert.ToInt32(sli_radius.Value);
 
