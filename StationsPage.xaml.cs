@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System.Drawing;
 using System.IO;
 
 namespace Gasbear;
@@ -9,7 +10,16 @@ public partial class StationsPage : ContentPage
 	{
 		InitializeComponent();
 		GetResult(address, fuelArt, radius);
+
+        btn_navigate.BackgroundColor = Colors.Grey;
+        btn_navigate.IsEnabled = false;
+
+        btn_saveAsTxt.BackgroundColor = Colors.Grey;
+        btn_saveAsTxt.IsEnabled = false;
     }
+
+    public string stationLat = "0";
+    public string stationLon = "0";
 
 	public async void GetResult(string address, string fuelArt, int radius)
 	{
@@ -50,12 +60,12 @@ public partial class StationsPage : ContentPage
                 }
                 else
                 {
-                    AppendStationsInfo("Es konnten keine Koordinaten zur eingegebenen Addresse bezgogen werden!\nBitte Eingabe prüfen!");
+                    AppendStationsInfo("Es konnten keine Koordinaten zur eingegebenen Addresse bezgogen werden!\nBitte Eingabe prüfen!\n");
                 }
             }
             else
             {
-                AppendStationsInfo("Open Street Map reagiert nicht...");
+                AppendStationsInfo("Open Street Map reagiert nicht...\n");
             }
 
             string dataTK = " ";
@@ -68,7 +78,7 @@ public partial class StationsPage : ContentPage
             }
             else
             {
-                AppendStationsInfo("Tankerkönig reagiert nicht...");
+                AppendStationsInfo("Tankerkönig reagiert nicht...\n");
             }
 
             RootObject root = JsonConvert.DeserializeObject<RootObject>(dataTK);
@@ -77,12 +87,72 @@ public partial class StationsPage : ContentPage
                 AppendStationsInfo($"Anzahl gefundener Stationen im angegebenen Umkreis: {root.Stations.Count}\n");
                 AppendStationsInfo($"Spritpreise vom {timestamp} \n\nAngefragte Adresse:\n{address}\n\n" +
                                       $"Umkreis: {radius} km\nKraftstroffsuche: {fuelArt}\nGefundene Stationen: {root.Stations.Count}");
+
+                btn_saveAsTxt.BackgroundColor = Colors.LightBlue;
+                btn_saveAsTxt.IsEnabled = true;
+
+                foreach (var station in root.Stations)
+                {
+                    string stationText = "Leer";
+
+                    switch (fuelArt)
+                    {
+                        case "Alle Wählbaren":
+                            stationText = $"{station.Brand}\n{station.Street} in {station.Place} - {station.Dist} km\n---\nDiesel: \t\t\t\t\t{station.Diesel}\n" +
+                                $"Benzin E5: \t\t{station.E5}\nBenzin E10: \t\t{station.E10}\n";
+                            break;
+
+                        case "Diesel":
+                            stationText = $"{station.Brand}\n{station.Street} in {station.Place} - {station.Dist} km\n---\nDiesel: \t\t\t\t\t{station.Diesel}\n";
+                            break;
+
+                        case "Benzin E5":
+                            stationText = $"{station.Brand}\n{station.Street} in {station.Place} - {station.Dist} km\n---\nBenzin E5: \t\t{station.E5}\n";
+                            break;
+
+                        case "Benzin E10":
+                            stationText = $"{station.Brand}\n{station.Street} in {station.Place} - {station.Dist} km\n---\nBenzin E10: \t\t{station.E10}\n";
+                            break;
+                    }
+
+                    var radioButton = new RadioButton
+                    {
+                        Content = stationText,
+                        HorizontalOptions = LayoutOptions.Start,
+                        BackgroundColor = Colors.Transparent,
+                        TextColor = Colors.White,
+                        Margin = 16
+                    };
+
+                    radioButton.CheckedChanged += (sender, e) =>
+                    {
+                        if (e.Value) // Überprüft, ob der Radiobutton ausgewählt wurde
+                        {
+                            stationLat = $"{station.Lat}";
+                            stationLon = $"{station.Lng}";
+                            btn_navigate.BackgroundColor = Colors.LightGreen;
+                            btn_navigate.IsEnabled = true;
+                        }
+                    };
+
+                    slo_stationButtons.Children.Add(radioButton);
+                }
             }
+            else
+            {
+                AppendStationsInfo("Fehlende Koordinaten...,\noder es wurden keine Stationen im Umkreis der Koordinaten gefunden, \noder keine Daten erhalten!");
+            }
+            
         }
     }
 
     public void AppendStationsInfo(string text)
     {
         lbl_stationsInfo.Text += text;
+    }
+
+    private void btn_navigate_Clicked(object sender, EventArgs e)
+    {
+
     }
 }

@@ -16,23 +16,24 @@
                FontSize="24"/>
 
         <Label x:Name="lbl_stationsInfo"
-               BackgroundColor="Grey"
+               Margin="10"
                Grid.ColumnSpan="2"
                Grid.Row="1"/>
 
         <ScrollView Grid.ColumnSpan="2"
                     Grid.Row="2">
-            <StackLayout>
+            <StackLayout x:Name="slo_stationButtons">
 
             </StackLayout>
         </ScrollView>
 
-        <Button Grid.Row="3"
+        <Button x:Name="btn_saveAsTxt" Grid.Row="3"
                 Grid.Column="0"
                 Text="Erstelle Textdatei"
                 Margin="16"/>
 
-        <Button Grid.Row="3"
+        <Button x:Name="btn_navigate"
+                Grid.Row="3"
                 Grid.Column="1"
                 Text="Navigation"
                 Margin="16"/>
