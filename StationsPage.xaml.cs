@@ -151,8 +151,21 @@ public partial class StationsPage : ContentPage
         lbl_stationsInfo.Text += text;
     }
 
-    private void btn_navigate_Clicked(object sender, EventArgs e)
+    private async void btn_navigate_Clicked(object sender, EventArgs e)
     {
+        await NavigateToStation();
+    }
 
+    private async Task NavigateToStation()
+    {
+        double sLat = Convert.ToDouble(stationLat);
+        double sLon = Convert.ToDouble(stationLon);
+        var location = new Location(sLat, sLon);
+
+        if (await Map.Default.TryOpenAsync(location) == false)
+        {
+            lbl_actionsInfo.TextColor = Colors.IndianRed;
+            lbl_actionsInfo.Text = "Karte konnte nicht geöffnet werden";
+        }
     }
 }

@@ -4,7 +4,7 @@
              x:Class="Gasbear.StationsPage"
              Title="StationsPage">
 
-    <Grid RowDefinitions="Auto, Auto, *, Auto"
+    <Grid RowDefinitions="Auto, Auto, *, Auto, Auto"
           ColumnDefinitions="*, *">
 
         <Label x:Name="lbl_stationsHeader"
@@ -36,7 +36,12 @@
                 Grid.Row="3"
                 Grid.Column="1"
                 Text="Navigation"
-                Margin="16"/>
+                Margin="16"
+                Clicked="btn_navigate_Clicked"/>
+
+        <Label x:Name="lbl_actionsInfo"
+               Margin="10"
+               Grid.Row="4"/>
     </Grid>
 
 </ContentPage>
