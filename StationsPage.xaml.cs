@@ -1,3 +1,4 @@
+using Android.Net.Wifi;
 using Newtonsoft.Json;
 using System.Drawing;
 using System.IO;
@@ -16,6 +17,9 @@ public partial class StationsPage : ContentPage
 
         btn_saveAsTxt.BackgroundColor = Colors.Grey;
         btn_saveAsTxt.IsEnabled = false;
+
+        lbl_actionsInfo.TextColor = Colors.Grey;
+        lbl_actionsInfo.Text = "Bedenke, dass sich die Spritpreise jederzeit ändern können!";
     }
 
     public string stationLat = "0";
@@ -55,12 +59,10 @@ public partial class StationsPage : ContentPage
                 {
                     lat = result[0].lat;
                     lon = result[0].lon;
-
-                    AppendStationsInfo("Koordinaten zur Adresse gefunden: \nLatitude: " + Convert.ToString(lat) + " Longitude: " + Convert.ToString(lon) + "\n");
                 }
                 else
                 {
-                    AppendStationsInfo("Es konnten keine Koordinaten zur eingegebenen Addresse bezgogen werden!\nBitte Eingabe prüfen!\n");
+                    AppendStationsInfo("Es konnten keine Koordinaten zur eingegebenen Addresse bezgogen werden!\n\nBitte Eingabe prüfen!\n\n");
                 }
             }
             else
@@ -84,7 +86,7 @@ public partial class StationsPage : ContentPage
             RootObject root = JsonConvert.DeserializeObject<RootObject>(dataTK);
             if (root != null && root.Stations != null && root.Stations.Any())
             {
-                AppendStationsInfo($"Anzahl gefundener Stationen im angegebenen Umkreis: {root.Stations.Count}\n");
+                AppendStationsInfo($"Anzahl gefundener Stationen: {root.Stations.Count}\n");
                 AppendStationsInfo($"Spritpreise vom {timestamp} \n\nAngefragte Adresse:\n{address}\n\n" +
                                       $"Umkreis: {radius} km\nKraftstroffsuche: {fuelArt}\nGefundene Stationen: {root.Stations.Count}");
 
@@ -98,30 +100,51 @@ public partial class StationsPage : ContentPage
                     switch (fuelArt)
                     {
                         case "Alle Wählbaren":
-                            stationText = $"{station.Brand}\n{station.Street} in {station.Place} - {station.Dist} km\n---\nDiesel: \t\t\t\t\t{station.Diesel}\n" +
-                                $"Benzin E5: \t\t{station.E5}\nBenzin E10: \t\t{station.E10}\n";
+                            stationText = $"{station.Brand}\n" +
+                                $"{station.Street} {station.HouseNumber}\n" +
+                                $"{station.PostCode} {station.Place}\n" +
+                                $"Entfernung: {station.Dist} km\n" +
+                                $"Diesel: \t\t\t\t\t\t{station.Diesel}\n" +
+                                $"Benzin E5: \t\t\t{station.E5}\n" +
+                                $"Benzin E10: \t\t{station.E10}";
                             break;
 
                         case "Diesel":
-                            stationText = $"{station.Brand}\n{station.Street} in {station.Place} - {station.Dist} km\n---\nDiesel: \t\t\t\t\t{station.Diesel}\n";
+                            stationText = $"{station.Brand}\n" +
+                                $"{station.Street} {station.HouseNumber}\n" +
+                                $"{station.PostCode} {station.Place}\n" +
+                                $"Entfernung: {station.Dist} km\n" +
+                                $"Diesel: \t\t\t\t\t\t{station.Diesel}";
                             break;
 
                         case "Benzin E5":
-                            stationText = $"{station.Brand}\n{station.Street} in {station.Place} - {station.Dist} km\n---\nBenzin E5: \t\t{station.E5}\n";
+                            stationText = $"{station.Brand}\n" +
+                                $"{station.Street} {station.HouseNumber}\n" +
+                                $"{station.PostCode} {station.Place}\n" +
+                                $"Entfernung: {station.Dist} km\n" +
+                                $"Benzin E5: \t\t\t{station.E5}";
                             break;
 
                         case "Benzin E10":
-                            stationText = $"{station.Brand}\n{station.Street} in {station.Place} - {station.Dist} km\n---\nBenzin E10: \t\t{station.E10}\n";
+                            stationText = $"{station.Brand}\n" +
+                                $"{station.Street} {station.HouseNumber}\n" +
+                                $"{station.PostCode} {station.Place}\n" +
+                                $"Entfernung: {station.Dist} km\n" +
+                                $"Benzin E10: \t\t{station.E10}";
                             break;
                     }
 
-                    var radioButton = new RadioButton
+                    var radioButton = new RadioButton()
                     {
                         Content = stationText,
+                        Margin = 16,
                         HorizontalOptions = LayoutOptions.Start,
                         BackgroundColor = Colors.Transparent,
-                        TextColor = Colors.White,
-                        Margin = 16
+                        BorderWidth = 3,
+                        BorderColor = Colors.LightBlue,
+                        CornerRadius = 16,
+                        WidthRequest = 300,
+                        HeightRequest = 160,
                     };
 
                     radioButton.CheckedChanged += (sender, e) =>
@@ -165,7 +188,8 @@ public partial class StationsPage : ContentPage
         if (await Map.Default.TryOpenAsync(location) == false)
         {
             lbl_actionsInfo.TextColor = Colors.IndianRed;
-            lbl_actionsInfo.Text = "Karte konnte nicht geöffnet werden";
+            lbl_actionsInfo.Text = "Navigationsapp konnte nicht geöffnet werden";
+            lbl_actionsInfo.TextColor = Colors.Grey;
         }
     }
 }
