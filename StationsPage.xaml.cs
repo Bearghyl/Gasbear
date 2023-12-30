@@ -171,8 +171,8 @@ public partial class StationsPage : ContentPage
             else
             {
                 AppendStationsInfo("Fehlende Koordinaten...,\n" +
-                    "oder es wurden keine Stationen im Umkreis der Koordinaten gefunden,\n" +
-                    " oder keine Daten erhalten!");
+                    "oder es wurden keine Stationen im Umkreis der Koordinaten gefunden, \n" +
+                    "oder keine Daten erhalten!");
             }
             
         }
@@ -185,7 +185,7 @@ public partial class StationsPage : ContentPage
 
     private async void btn_saveAsDocument(object sender, EventArgs e)
     {
-        string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments); // Pfrad benutzerunfreundlich! CommonDokuments ist "read only" (Problem)
         string folderPath = Path.Combine(documentsPath, "Spritbaer");
         string filePath = Path.Combine(folderPath, $"{paddress} ({timestamp}).txt");
 
@@ -193,7 +193,7 @@ public partial class StationsPage : ContentPage
         if (writePermission == PermissionStatus.Granted && File.Exists(filePath))
         {
             lbl_actionsInfo.TextColor = Colors.LightGreen;
-            lbl_actionsInfo.Text = $"Datei wurde bereits angelegt: {filePath}";
+            lbl_actionsInfo.Text = $"Datei wurde bereits angelegt.";
             lbl_actionsInfo.TextColor = Colors.Grey;
         }
         else if(writePermission == PermissionStatus.Granted && !File.Exists(filePath))
@@ -209,7 +209,7 @@ public partial class StationsPage : ContentPage
             }
 
             lbl_actionsInfo.TextColor = Colors.LightGreen;
-            lbl_actionsInfo.Text = $"Datei erstellt unter {filePath}";
+            lbl_actionsInfo.Text = $"Datei erstellt.";
             lbl_actionsInfo.TextColor = Colors.Grey;
         }
         else

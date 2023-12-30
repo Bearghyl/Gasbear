@@ -1,7 +1,5 @@
-﻿using Microsoft.Maui.Controls;
-using Newtonsoft.Json;
-using System.IO;
-using System.Text;
+﻿
+using System.Net;
 
 namespace Gasbear
 {
@@ -11,18 +9,67 @@ namespace Gasbear
         {
             InitializeComponent();
         }
-        async void btn_sniff_Clicked(object sender, EventArgs e)
+        private async void btn_sniff_Clicked(object sender, EventArgs e)
         {
-            // Eingabe
             string address = ent_streetHousenumber.Text + ", " + ent_postcodePlace.Text;
             string fuelArt = GetSelectedFuelType();
             int radius = Convert.ToInt32(sli_radius.Value);
 
             await Navigation.PushModalAsync(new StationsPage(address, fuelArt, radius));
         }
-        async void btn_apiKey_Clicked(object sender, EventArgs e)
+        private async void btn_apiKey_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushModalAsync(new ApiKeyPage());
+        }
+        private async void btn_myPosition_Clicked(object sender, EventArgs e)
+        {
+            lbl_mainActionsInfo.Text = "Standort wird ermittelt...";
+            CancellationTokenSource _cancelTokenSource;
+            bool _isCheckingLocation;
+
+            try
+            {
+                _isCheckingLocation = true;
+
+                GeolocationRequest request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));
+
+                _cancelTokenSource = new CancellationTokenSource();
+
+                Location location = await Geolocation.Default.GetLocationAsync(request, _cancelTokenSource.Token);
+
+                if (location != null)
+                {
+                    IEnumerable<Placemark> placemarks = await Geocoding.Default.GetPlacemarksAsync(location.Latitude, location.Longitude);
+
+                    Placemark placemark = placemarks?.FirstOrDefault();
+
+                    if (placemark != null)
+                    {
+                        lbl_mainActionsInfo.TextColor = Colors.Green;
+                        lbl_mainActionsInfo.Text = "Standortabfrage erfolgreich!";
+                        ent_streetHousenumber.Text = $"{placemark.Thoroughfare} {placemark.SubThoroughfare}";
+                        ent_postcodePlace.Text = $"{placemark.PostalCode} {placemark.Locality}";
+                    }
+                    else
+                    {
+                        lbl_mainActionsInfo.TextColor = Colors.IndianRed;
+                        lbl_mainActionsInfo.Text = "Keine Adresse zu den Koordinaten gefunden!";
+
+                    }
+
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                lbl_mainActionsInfo.TextColor = Colors.IndianRed;
+                lbl_mainActionsInfo.Text = ex.Message;
+            }
+            finally
+            {
+                _isCheckingLocation = false;
+            }
         }
         private void sli_radius_ValueChanged(object sender, ValueChangedEventArgs e)
         {
