@@ -31,7 +31,8 @@
         <Button x:Name="btn_saveAsTxt" Grid.Row="3"
                 Grid.Column="0"
                 Text="Erstelle Textdatei"
-                Margin="16"/>
+                Margin="16"
+                Clicked="btn_saveAsDocument"/>
 
         <Button x:Name="btn_navigate"
                 Grid.Row="3"

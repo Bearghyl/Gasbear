@@ -57,6 +57,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AndroidResource Remove="Resources\Saves\**" />
+	  <Compile Remove="Resources\Saves\**" />
+	  <EmbeddedResource Remove="Resources\Saves\**" />
+	  <MauiCss Remove="Resources\Saves\**" />
+	  <MauiXaml Remove="Resources\Saves\**" />
+	  <None Remove="Resources\Saves\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Compile Remove="Stations.cs" />
 	</ItemGroup>
 

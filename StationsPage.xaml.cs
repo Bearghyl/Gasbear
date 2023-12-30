@@ -1,4 +1,3 @@
-using Android.Net.Wifi;
 using Newtonsoft.Json;
 using System.Drawing;
 using System.IO;
@@ -7,10 +6,18 @@ namespace Gasbear;
 
 public partial class StationsPage : ContentPage
 {
-	public StationsPage(string address, string fuelArt, int radius)
+    public string stationLat = "0";
+    public string stationLon = "0";
+    public string stationsInfoTxt = "";
+    public DateTime timestamp = DateTime.Now;
+    public string paddress = string.Empty;
+
+    public StationsPage(string address, string fuelArt, int radius)
 	{
 		InitializeComponent();
 		GetResult(address, fuelArt, radius);
+
+        paddress = address;
 
         btn_navigate.BackgroundColor = Colors.Grey;
         btn_navigate.IsEnabled = false;
@@ -19,11 +26,9 @@ public partial class StationsPage : ContentPage
         btn_saveAsTxt.IsEnabled = false;
 
         lbl_actionsInfo.TextColor = Colors.Grey;
-        lbl_actionsInfo.Text = "Bedenke, dass sich die Spritpreise jederzeit ändern können!";
+        lbl_actionsInfo.Text = "Bedenke, dass sich die Spritpreise jederzeit ändern können! " +
+            "Die angegebenen Entfernungen enprechen der Luftlinie.";
     }
-
-    public string stationLat = "0";
-    public string stationLon = "0";
 
 	public async void GetResult(string address, string fuelArt, int radius)
 	{
@@ -43,10 +48,8 @@ public partial class StationsPage : ContentPage
             }
             double lat = 0;
             double lon = 0;
-            DateTime timestamp = DateTime.Now;
 
             string encodedAddress = Uri.EscapeDataString(address);
-            //Open Street Map benötigt folgende Zeile, sonst kommt keine Antwort zurück.
             client.DefaultRequestHeaders.Add("User-Agent", "YourApp");
 
             string apiUrlOSM = ("https://nominatim.openstreetmap.org/search?format=json&q=" + encodedAddress);
@@ -62,7 +65,8 @@ public partial class StationsPage : ContentPage
                 }
                 else
                 {
-                    AppendStationsInfo("Es konnten keine Koordinaten zur eingegebenen Addresse bezgogen werden!\n\nBitte Eingabe prüfen!\n\n");
+                    AppendStationsInfo("Es konnten keine Koordinaten zur eingegebenen Addresse bezgogen werden!\n\n" +
+                        "Bitte Eingabe prüfen!\n\n");
                 }
             }
             else
@@ -86,8 +90,10 @@ public partial class StationsPage : ContentPage
             RootObject root = JsonConvert.DeserializeObject<RootObject>(dataTK);
             if (root != null && root.Stations != null && root.Stations.Any())
             {
-                AppendStationsInfo($"Anzahl gefundener Stationen: {root.Stations.Count}\n");
                 AppendStationsInfo($"Spritpreise vom {timestamp} \n\nAngefragte Adresse:\n{address}\n\n" +
+                                      $"Umkreis: {radius} km\nKraftstroffsuche: {fuelArt}\nGefundene Stationen: {root.Stations.Count}");
+
+                AppendStationsInfoText($"Spritpreise vom {timestamp} \n\nAngefragte Adresse:\n{address}\n\n" +
                                       $"Umkreis: {radius} km\nKraftstroffsuche: {fuelArt}\nGefundene Stationen: {root.Stations.Count}");
 
                 btn_saveAsTxt.BackgroundColor = Colors.LightBlue;
@@ -149,7 +155,7 @@ public partial class StationsPage : ContentPage
 
                     radioButton.CheckedChanged += (sender, e) =>
                     {
-                        if (e.Value) // Überprüft, ob der Radiobutton ausgewählt wurde
+                        if (e.Value)
                         {
                             stationLat = $"{station.Lat}";
                             stationLon = $"{station.Lng}";
@@ -159,13 +165,59 @@ public partial class StationsPage : ContentPage
                     };
 
                     slo_stationButtons.Children.Add(radioButton);
+                    AppendStationsInfoText(stationText);
                 }
             }
             else
             {
-                AppendStationsInfo("Fehlende Koordinaten...,\noder es wurden keine Stationen im Umkreis der Koordinaten gefunden, \noder keine Daten erhalten!");
+                AppendStationsInfo("Fehlende Koordinaten...,\n" +
+                    "oder es wurden keine Stationen im Umkreis der Koordinaten gefunden,\n" +
+                    " oder keine Daten erhalten!");
             }
             
+        }
+    }
+
+    private async void btn_navigate_Clicked(object sender, EventArgs e)
+    {
+        await NavigateToStation();
+    }
+
+    private async void btn_saveAsDocument(object sender, EventArgs e)
+    {
+        string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        string folderPath = Path.Combine(documentsPath, "Spritbaer");
+        string filePath = Path.Combine(folderPath, $"{paddress} ({timestamp}).txt");
+
+        PermissionStatus writePermission = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
+        if (writePermission == PermissionStatus.Granted && File.Exists(filePath))
+        {
+            lbl_actionsInfo.TextColor = Colors.LightGreen;
+            lbl_actionsInfo.Text = $"Datei wurde bereits angelegt: {filePath}";
+            lbl_actionsInfo.TextColor = Colors.Grey;
+        }
+        else if(writePermission == PermissionStatus.Granted && !File.Exists(filePath))
+        {
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
+            using (StreamWriter sw =  new StreamWriter(filePath))
+            {
+                sw.Write(stationsInfoTxt);
+            }
+
+            lbl_actionsInfo.TextColor = Colors.LightGreen;
+            lbl_actionsInfo.Text = $"Datei erstellt unter {filePath}";
+            lbl_actionsInfo.TextColor = Colors.Grey;
+        }
+        else
+        {
+            lbl_actionsInfo.TextColor = Colors.IndianRed;
+            lbl_actionsInfo.Text = "Fehlende Berechtigung für die App. " +
+                "Bitte in den Einstellungen die benötigten Berechtigungen prüfen.";
+            lbl_actionsInfo.TextColor = Colors.Grey;
         }
     }
 
@@ -174,9 +226,9 @@ public partial class StationsPage : ContentPage
         lbl_stationsInfo.Text += text;
     }
 
-    private async void btn_navigate_Clicked(object sender, EventArgs e)
+    public void AppendStationsInfoText(string text)
     {
-        await NavigateToStation();
+        stationsInfoTxt += text;
     }
 
     private async Task NavigateToStation()
