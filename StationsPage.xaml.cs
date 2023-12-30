@@ -112,7 +112,7 @@ public partial class StationsPage : ContentPage
                                 $"Entfernung: {station.Dist} km\n" +
                                 $"Diesel: \t\t\t\t\t\t{station.Diesel}\n" +
                                 $"Benzin E5: \t\t\t{station.E5}\n" +
-                                $"Benzin E10: \t\t{station.E10}";
+                                $"Benzin E10: \t\t\t{station.E10}";
                             break;
 
                         case "Diesel":
@@ -136,7 +136,7 @@ public partial class StationsPage : ContentPage
                                 $"{station.Street} {station.HouseNumber}\n" +
                                 $"{station.PostCode} {station.Place}\n" +
                                 $"Entfernung: {station.Dist} km\n" +
-                                $"Benzin E10: \t\t{station.E10}";
+                                $"Benzin E10: \t\t\t{station.E10}";
                             break;
                     }
 
