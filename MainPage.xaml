@@ -8,7 +8,7 @@
           RowDefinitions="200, *, Auto, Auto, *, *, Auto, Auto" 
           ColumnDefinitions="*, *">
 
-        <Image Source="dotnet_bot.png" 
+        <Image Source="gasbear_white.png" 
                BackgroundColor="Transparent" 
                Grid.ColumnSpan="2" 
                Grid.RowSpan="1"/>
@@ -18,8 +18,7 @@
               Grid.Row="1">
             
             <Label x:Name="lbl_Info" 
-                   Text="Diese App funkitoniert nur in Deutschland. Es wird ein API-Key benötigt, 
-                   der via Link auf der API-Seite angefordert werden kann." 
+                   Text="Diese App funkitoniert nur in Deutschland. Es wird ein API-Key benötigt, der via Link auf der API-Seite angefordert werden kann." 
                    Margin="8"/>
             
             <Button x:Name="btn_apiKey" 
